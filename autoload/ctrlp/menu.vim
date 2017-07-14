@@ -43,14 +43,14 @@ function! ctrlp#menu#accept(mode, str)
     if type(s:cmd) == 2
       let s:cmd = s:cmd(s:mode, s:str)
     endif
-    "if s:cmd =~ '^@'
-    "  let s:cmd = s:cmd[1:]
-    "  call feedkeys("\<plug>(ctrlp-menu-launch)")
-    "elseif s:cmd =~ '^!'
-    "  silent exe s:cmd
-    "else
-    "  exe s:cmd
-    "endif
+    if s:cmd =~ '^@'
+      let s:cmd = s:cmd[1:]
+      call feedkeys("\<plug>(ctrlp-menu-launch)")
+    elseif s:cmd =~ '^!'
+      silent exe s:cmd
+    else
+      exe s:cmd
+    endif
   endif
 endfunction
 
