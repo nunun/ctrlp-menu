@@ -1,10 +1,5 @@
 command! CtrlPMenu cal ctrlp#init(ctrlp#menu#id())
 
-"function s:Test(mode, str)
-"    return "@:vimgrep "
-"endfunc
-"let g:ctrlp_menu = [["Test", function("s:Test")]]
-
 if !exists("g:ctrlp_menu")
     let g:ctrlp_menu = []
 endif

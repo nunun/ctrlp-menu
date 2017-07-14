@@ -40,22 +40,22 @@ function! ctrlp#menu#accept(mode, str)
     let s:mode = a:mode
     let s:str  = a:str
     let s:cmd  = lines[0][1]
-    call feedkeys("\<plug>(ctrlp-menu-launch)")
+    if type(s:cmd) == 2
+      let s:cmd = s:cmd(s:mode, s:str)
+    endif
+    "if s:cmd =~ '^@'
+    "  let s:cmd = s:cmd[1:]
+    "  call feedkeys("\<plug>(ctrlp-menu-launch)")
+    "elseif s:cmd =~ '^!'
+    "  silent exe s:cmd
+    "else
+    "  exe s:cmd
+    "endif
   endif
 endfunction
 
 function! ctrlp#menu#launch()
-  if type(s:cmd) == 2
-    let s:cmd = s:cmd(s:mode, s:str)
-  endif
-  if s:cmd =~ '^@'
-    return s:cmd[1:]
-  elseif s:cmd =~ '^!'
-    silent exe s:cmd
-  else
-    exe s:cmd
-  endif
-  return ''
+  return s:cmd
 endfunction
 
 function! ctrlp#menu#exit()
