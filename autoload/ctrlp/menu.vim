@@ -23,24 +23,32 @@ else
 endif
 
 function! ctrlp#menu#init()
-  let file = fnamemodify(expand(s:config_file), ':p')
-  let s:list = filereadable(file) ? filter(map(readfile(file), 'split(iconv(v:val, "utf-8", &encoding), "\\t\\+")'), 'len(v:val) > 0 && v:val[0]!~"^#"') : []
-  let s:list += [["--edit-menu--", printf("split %s", s:config_file)]]
-  return map(copy(s:list), 'v:val[0]')
+  let menu = []
+  for item in g:ctrlp_menu
+    if !exists("item[2]") || item[2]
+      call add(menu, item[0])
+    endif
+  endfor
+  return menu
 endfunc
 
 function! ctrlp#menu#accept(mode, str)
-  let lines = filter(copy(s:list), 'v:val[0] == a:str')
+  let lines = filter(copy(g:ctrlp_menu), 'v:val[0] == a:str')
   call ctrlp#exit()
   redraw!
   if len(lines) > 0 && len(lines[0]) > 1
-    let s:cmd = lines[0][1]
-    execute "normal \<plug>(ctrlp-menu-launch)"
+    let s:mode = a:mode
+    let s:str  = a:str
+    let s:cmd  = lines[0][1]
+    call feedkeys("\<plug>(ctrlp-menu-launch)")
   endif
 endfunction
 
 function! ctrlp#menu#launch()
-  if s:cmd =~ '^?'
+  if type(s:cmd) == 2
+    let s:cmd = s:cmd(s:mode, s:str)
+  endif
+  if s:cmd =~ '^@'
     return s:cmd[1:]
   elseif s:cmd =~ '^!'
     silent exe s:cmd
