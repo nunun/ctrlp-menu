@@ -22,9 +22,14 @@ else
   let g:ctrlp_ext_vars = [s:menu_var]
 endif
 
+let s:select = "default"
+function! ctrlp#menu#select(...)
+  let s:select = (a:0 <= 0)? "default" : a:1
+endfunc
+
 function! ctrlp#menu#init()
   let menu = []
-  for item in g:ctrlp_menu
+  for item in g:ctrlp_menu[s:select]
     if !exists("item[2]") || item[2]
       call add(menu, item[0])
     endif
@@ -33,7 +38,7 @@ function! ctrlp#menu#init()
 endfunc
 
 function! ctrlp#menu#accept(mode, str)
-  let lines = filter(copy(g:ctrlp_menu), 'v:val[0] == a:str')
+  let lines = filter(copy(g:ctrlp_menu[s:select]), 'v:val[0] == a:str')
   call ctrlp#exit()
   redraw!
   if len(lines) > 0 && len(lines[0]) > 1

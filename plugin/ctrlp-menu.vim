@@ -1,4 +1,5 @@
-command! CtrlPMenu cal ctrlp#init(ctrlp#menu#id())
+command! -nargs=* CtrlPMenu cal ctrlp#menu#select(<q-args>)
+\                     <bar> cal ctrlp#init(ctrlp#menu#id())
 
 if !exists("g:ctrlp_menu")
     let g:ctrlp_menu = []
