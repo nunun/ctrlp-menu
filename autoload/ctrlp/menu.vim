@@ -38,7 +38,8 @@ function! ctrlp#menu#init()
 endfunc
 
 function! ctrlp#menu#accept(mode, str)
-  let lines = filter(copy(g:ctrlp_menu[s:select]), 'v:val[0] == a:str')
+  let filter = 'v:val[0] == a:str && (!exists("v:val[2]") || v:val[2])'
+  let lines  = filter(copy(g:ctrlp_menu[s:select]), filter)
   call ctrlp#exit()
   redraw!
   if len(lines) > 0 && len(lines[0]) > 1
